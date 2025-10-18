@@ -1,0 +1,20 @@
+class Solution {
+    public int findMedian(Node root) {
+        List<Integer> inorderList = new ArrayList<>();
+        inorderTraversal(root, inorderList);
+        
+        int n = inorderList.size();
+        if (n % 2 == 1) {
+            return inorderList.get(n / 2);
+        } else {
+            return inorderList.get((n / 2) - 1);
+        }
+    }
+
+    private void inorderTraversal(Node root, List<Integer> list) {
+        if (root == null) return;
+        inorderTraversal(root.left, list);
+        list.add(root.data);
+        inorderTraversal(root.right, list);
+    }
+}
