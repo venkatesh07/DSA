@@ -1,0 +1,28 @@
+Given the root of a binary tree, return its maximum depth.
+A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+Example 1:
+Input: root = [3,9,20,null,null,15,7]
+Output: 3
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+
+        if(root == null) return 0;
+
+        int lh = maxDepth(root.left);
+        int rh = maxDepth(root.right);
+
+        return Math.max(lh, rh) + 1;
+        
+    }
+}
+
+T.C -> O(N)
+S.C -> O(H)
+Final Clarification
+Tree Type	Height (H)	Space Complexity	Reason
+Balanced Tree	log N	O(log N)	Stack depth = height
+Skewed Tree	N	O(N)	Stack depth = number of nodes
+So the general expression is:
+🔹 Space Complexity = O(H)
+(which can vary between O(log N) and O(N) depending on the tree shape)
