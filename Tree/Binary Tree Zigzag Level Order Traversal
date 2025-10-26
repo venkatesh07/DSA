@@ -1,0 +1,51 @@
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
+Example 1:
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+
+Code:
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        
+        List<List<Integer>> res = new LinkedList<>();
+
+        if(root == null) return res;
+
+        boolean leftToRight = true;
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        q.add(root);
+
+        while(!q.isEmpty()){
+            int n = q.size();
+            LinkedList<Integer> li = new LinkedList<>();
+            for(int i=0;i<n;i++){
+                TreeNode node = q.poll();
+                li.add(node.val);
+                if(node.left != null) q.add(node.left);
+                if(node.right != null) q.add(node.right);
+            }
+            if(!leftToRight) Collections.reverse(li);
+            leftToRight = !leftToRight;
+            res.add(li);
+        }
+        return res;
+    }
+}
+
+
+Time Complexity: O(N)
+Each node is visited exactly once, so the traversal is O(N).
+The only extra cost is from:
+Collections.reverse(li);
+That runs once per level.
+But since the total number of elements across all levels = N,
+The total reversing cost is still O(N) overall.
+Final: O(N)
+
+Space Complexity: O(N)
+Queue: at most stores one level’s nodes → O(W) (width of tree), in worst case ≈ O(N) for skewed trees.
+Result List: stores all node values → O(N)
+Temporary list li: up to one level of nodes → O(W) ≤ O(N)
+Final: O(N) overall.
