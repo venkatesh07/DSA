@@ -1,0 +1,46 @@
+You are given n courses, labeled from 0 to n - 1 and a 2d array prerequisites[][] where prerequisites[i] = [x, y] indicates that we need to take course  y first if we want to take course x.
+
+Find the ordering of courses we should take to complete all the courses.
+
+Note: There may be multiple correct orders, you just need to return any one of them. If it is impossible to finish all tasks, return an empty array. The Driver code will print true if you return any correct order of courses else it will print false. 
+
+Examples:
+
+Input: n = 3, prerequisites[][] = [[1, 0], [2, 1]]
+Output: true
+Explanation: To take course 1, you must finish course 0. To take course 2, you must finish course 1. So the only valid order is [0, 1, 2].
+
+Code:
+class Solution {
+    public void fill(char[][] grid) {
+       int n = grid.length;
+        int m = grid[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (grid[i][0] == 'O') q.offer(new int[]{i, 0});
+            if (grid[i][m - 1] == 'O') q.offer(new int[]{i, m - 1});
+        }
+        for (int j = 0; j < m; j++) {
+            if (grid[0][j] == 'O') q.offer(new int[]{0, j});
+            if (grid[n - 1][j] == 'O') q.offer(new int[]{n - 1, j});
+        }
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+        while (!q.isEmpty()) {
+            int[] cell = q.poll();
+            int x = cell[0], y = cell[1];
+            if (x < 0 || y < 0 || x >= n || y >= m || grid[x][y] != 'O') continue;
+            grid[x][y] = '#';
+            for (int[] d : dirs) {
+                int nx = x + d[0], ny = y + d[1];
+                if (nx >= 0 && ny >= 0 && nx < n && ny < m && grid[nx][ny] == 'O')
+                    q.offer(new int[]{nx, ny});
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 'O') grid[i][j] = 'X';
+                else if (grid[i][j] == '#') grid[i][j] = 'O';
+            }
+        }
+    }
+}
