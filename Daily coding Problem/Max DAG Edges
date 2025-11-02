@@ -1,0 +1,57 @@
+Given a directed acyclic graph (DAG) with V vertices numbered from 0 to V-1 and E edges, represented as a 2D array edges[][], where each entry edges[i] = [u, v] denotes a directed edge from vertex u to vertex v, find the maximum number of additional edges that can be added to the graph without forming any cycles.
+
+Note: The resulting graph must remain a DAG, meaning that adding any further edge would not create a cycle.
+
+Examples:
+
+Input: V = 3, E = 2, edges[][] = [[0, 1], [1, 2]]
+Output: 1
+Explanation: The given DAG allows one more edge, 0 -> 2, which keeps the structure acyclic. Adding anything else would create a cycle.
+
+Code:
+ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i = 0; i < V; i++) adj.add(new ArrayList<>());
+        int[] indegree = new int[V];
+
+        for(int[] e : edges){
+            adj.get(e[0]).add(e[1]);
+            indegree[e[1]]++;
+        }
+
+        // Step 2: Topological sort (Kahn’s Algorithm)
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0; i < V; i++){
+            if(indegree[i] == 0) q.add(i);
+        }
+
+        ArrayList<Integer> topo = new ArrayList<>();
+        while(!q.isEmpty()){
+            int node = q.poll();
+            topo.add(node);
+            for(int nei : adj.get(node)){
+                indegree[nei]--;
+                if(indegree[nei] == 0) q.add(nei);
+            }
+        }
+
+        // Step 3: Create position map for topological order
+        int[] pos = new int[V];
+        for(int i = 0; i < V; i++){
+            pos[topo.get(i)] = i;
+        }
+
+        // Step 4: Mark existing edges in topological order
+        boolean[][] existing = new boolean[V][V];
+        for(int[] e : edges){
+            existing[pos[e[0]]][pos[e[1]]] = true;
+        }
+
+        // Step 5: Count all possible acyclic edges (u->v if pos[u] < pos[v])
+        int count = 0;
+        for(int i = 0; i < V; i++){
+            for(int j = i + 1; j < V; j++){
+                if(!existing[i][j]) count++;
+            }
+        }
+
+        return count;
