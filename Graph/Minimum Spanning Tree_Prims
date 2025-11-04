@@ -1,0 +1,60 @@
+Given a weighted, undirected, and connected graph with V vertices and E edges, your task is to find the sum of the weights of the edges in the Minimum Spanning Tree (MST) of the graph. The graph is provided as a list of edges, where each edge is represented as [u, v, w], indicating an edge between vertex u and vertex v with edge weight w.
+
+Input: V = 3, E = 3, Edges = [[0, 1, 5], [1, 2, 3], [0, 2, 1]]
+Output: 4
+
+Code:
+class pair{
+    int node, weight;
+    pair(int node, int weight){
+        this.node = node;
+        this.weight = weight;
+    }
+}
+
+class Solution {
+    public int spanningTree(int V, int[][] edges) {
+        // code here
+        
+        ArrayList<ArrayList<pair>> adj = new ArrayList<>();
+        for(int i=0;i<V;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int[] edge:edges){
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            
+            adj.get(u).add(new pair(v, wt));
+            adj.get(v).add(new pair(u, wt));
+        }
+        
+        
+        PriorityQueue<pair> pq = new PriorityQueue<pair>((x, y) -> x.weight - y.weight);
+        
+        pq.add(new pair(0, 0));
+        int sum = 0;
+        
+        boolean[] vis = new boolean[V];
+        
+        while(pq.size() > 0){
+            pair curr = pq.poll();
+            int node = curr.node;
+            int wt = curr.weight;
+            
+            if(vis[node]) continue;
+            
+            vis[node] = true;
+            sum += wt;
+            
+            for(pair neighbour : adj.get(node)){
+                if(!vis[neighbour.node]){
+                    pq.add(new pair(neighbour.node, neighbour.weight));
+                }
+            }
+            
+        }
+        return sum;
+    }
+}
