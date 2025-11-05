@@ -1,0 +1,65 @@
+Given an undirected, weighted graph with V vertices numbered from 0 to V-1 and E edges, represented by 2d array edges[][], where edges[i]=[u, v, w] represents the edge between the nodes u and v having w edge weight.
+You have to find the shortest distance of all the vertices from the source vertex src, and return an array of integers where the ith element denotes the shortest distance between ith node and source vertex src.
+
+Note: The Graph is connected and doesn't contain any negative weight edge.
+
+Examples:
+
+Input: V = 3, edges[][] = [[0, 1, 1], [1, 2, 3], [0, 2, 6]], src = 2
+Output: [4, 3, 0]
+
+Code:
+
+class pair {
+    int first;   
+    int second;  
+    pair(int first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+
+        ArrayList<ArrayList<pair>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            adj.get(u).add(new pair(v, wt));
+            adj.get(v).add(new pair(u, wt)); 
+        }
+
+        PriorityQueue<pair> pq = new PriorityQueue<>((a, b) -> a.first - b.first);
+        int[] dist = new int[V];
+        Arrays.fill(dist, (int) 1e9);
+        dist[src] = 0;
+        pq.add(new pair(0, src));
+
+        boolean[] visited = new boolean[V]; 
+
+        while (!pq.isEmpty()) {
+            pair curr = pq.poll();
+            int node = curr.second;
+            int wt = curr.first;
+
+            if (visited[node]) continue; 
+            visited[node] = true;
+
+            for (pair it : adj.get(node)) {
+                int adjNode = it.first;
+                int edgeWeight = it.second;
+
+                if (wt + edgeWeight < dist[adjNode]) {
+                    dist[adjNode] = wt + edgeWeight;
+                    pq.add(new pair(dist[adjNode], adjNode));
+                }
+            }
+        }
+
+        return dist;
+    }
+}
