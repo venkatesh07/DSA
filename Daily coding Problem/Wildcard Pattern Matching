@@ -14,26 +14,32 @@ Explanation: '?' matches with 'b' and '*' matches with "de".
 
 Code:
 class Solution {
-    public static int minSuperSeq(String s1, String s2) {
+    public boolean wildCard(String txt, String pat) {
         // code here
-        int n = s1.length();
-        int m = s2.length();
+      int n = txt.length();
+        int m = pat.length();
         
-        int [][]dp = new int [n + 1][m + 1];
+        boolean [][]dp = new boolean[n + 1][m + 1];
+        dp[0][0] = true;
+        for(int i = 1; i <= m; i++) {
+            if(pat.charAt(i - 1) != '*') break;
+            dp[0][i] = dp[0][i - 1];
+        }
         
         for(int i = 1; i <= n; i++) {
+            char s = txt.charAt(i - 1);
             for(int j = 1; j <= m; j++) {
-                if(s1.charAt(i - 1) == s2.charAt(j - 1)) {
-                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                char t = pat.charAt(j - 1);
+                
+                if(s == t || t == '?') {
+                    dp[i][j] = dp[i - 1][j - 1];
                 }
-                else {
-                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                else if(t == '*') {
+                    dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
                 }
             }
         }
-        //dp[n][m] + (n - dp[n][m]) + (m - dp[n][m]); you can simplify the equation
-        int result = n + m - dp[n][m];//finally simplified
         
-        return result;
+        return dp[n][m];  
     }
 }
