@@ -1,0 +1,38 @@
+You are given an array arr[] of positive integers (which may contain duplicates), your task is to find all the unique subsets of the array.
+
+Note: You can return the subsets in any order, the driver code will print them in sorted order.
+
+Examples:
+
+Input: arr[] = [1, 5, 6]
+Output: [[], [1], [1, 5], [1, 5, 6], [1, 6], [5], [5, 6], [6]]
+Explanation: The number of all the possible subsets will be 2n.
+Now the unique subsets are [], [1], [1, 5], [1, 5, 6], [1, 6], [5], [5, 6], [6].
+
+Code:
+class Solution {
+    public ArrayList<ArrayList<Integer>> findSubsets(int[] arr) {
+        // code here
+         int n = arr.length;
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<>();
+        Arrays.sort(arr);
+        helper(0, temp, ans, arr);
+        return ans;
+    }
+    private void helper(int index, ArrayList<Integer> temp, ArrayList<ArrayList<Integer>> ans, 
+    int[] arr){
+     
+     ans.add(new ArrayList<>(temp));   
+     
+     for(int i=index;i<arr.length;i++){
+        if(i > index && arr[i] == arr[i-1]) continue;
+         temp.add(arr[i]);
+         helper(i+1, temp, ans, arr);
+         temp.remove(temp.size()-1);
+     }
+    }
+
+Time Complexity = O(2ⁿ * n)
+Space Complexity = O(2ⁿ * n)
+}
