@@ -1,0 +1,37 @@
+Given an array arr[] containing only 0s, 1s, and 2s. Sort the array in ascending order.
+Note: You need to solve this problem without utilizing the built-in sort function.
+
+Examples:
+
+Input: arr[] = [0, 1, 2, 0, 1, 2]
+Output: [0, 0, 1, 1, 2, 2]
+Explanation: 0s, 1s and 2s are segregated into ascending order.
+
+Code:
+class Solution {
+    // Function to sort an array of 0s, 1s, and 2s
+    public void sort012(int[] arr) {
+        
+        int l = 0, h = arr.length-1, mid = 0;
+        
+        while(mid <= h){
+            if(arr[mid] == 0){
+                swap(arr, l, mid);
+                l++;
+                mid++;
+            }else if(arr[mid] == 1){
+                mid++;
+            }else{
+                swap(arr, mid, h);
+                h--;
+            }
+        }
+        
+    }
+    
+    private static void swap(int[] arr, int i, int h){
+        int temp = arr[i];
+        arr[i] = arr[h];
+        arr[h] = temp;
+    }
+}
