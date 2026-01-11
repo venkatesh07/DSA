@@ -1,0 +1,58 @@
+You are given two strings, s1 and s2. Your task is to find the smallest substring in s1 such that s2 appears as a subsequence within that substring.
+
+The characters of s2 must appear in the same sequence within the substring of s1.
+If there are multiple valid substrings of the same minimum length, return the one that appears first in s1.
+If no such substring exists, return an empty string.
+Note: Both the strings contain only lowercase english letters.
+
+Examples:
+
+Input: s1 = "geeksforgeeks", s2 = "eksrg"
+Output: "eksforg"
+Explanation: "eksforg" satisfies all required conditions. s2 is its subsequence and it is smallest and leftmost among all possible valid substrings of s1.
+
+Code:
+class Solution {
+    public String minWindow(String s1, String s2) {
+        // code here
+         int n = s1.length();
+        int m = s2.length();
+
+        int[][] dp = new int[n + 1][m + 1];
+
+        // Base case: empty s2
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = i;
+        }
+
+        for (int j = 1; j <= m; j++) {
+            dp[0][j] = -1;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        int start = -1;
+        int minLen = Integer.MAX_VALUE;
+
+        for (int i = 1; i <= n; i++) {
+            if (dp[i][m] != -1) {
+                int len = i - dp[i][m];
+                if (len < minLen) {
+                    minLen = len;
+                    start = dp[i][m];
+                }
+            }
+        }
+
+        return start == -1 ? "" : s1.substring(start, start + minLen);
+    }
+}
+
