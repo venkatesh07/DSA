@@ -1,0 +1,37 @@
+Given an array arr[], where each element contains either a 'P' for policeman or a 'T' for thief. Find the maximum number of thieves that can be caught by the police. 
+Keep in mind the following conditions :
+
+Each policeman can catch only one thief.
+A policeman cannot catch a thief who is more than k units away from him.
+Examples:
+
+Input: arr[] = ['P', 'T', 'T', 'P', 'T'], k = 1
+Output: 2
+Explanation: Maximum 2 thieves can be caught. First policeman catches first thief and second police man can catch either second or third thief.
+
+Code:
+class Solution {
+    public int catchThieves(char[] arr, int k) {
+        // code here
+        int p =0 ; 
+        int t = 0 ; 
+        int count = 0 ; 
+        while(p<arr.length && t<arr.length)
+        {
+            while(p<arr.length && arr[p]!='P') p++;
+            while(t<arr.length && arr[t]!='T') t++;
+             if(p>=arr.length || t>=arr.length ) break ; 
+             
+             if(Math.abs(p-t)<=k)
+             {
+                 count++;
+                 arr[p]='C';
+                 arr[t]='C';
+             }
+             else if(p<t) p++;
+             else t++;
+             
+         }
+         return count ; 
+    }
+}
