@@ -1,0 +1,57 @@
+Given a non-negative integer s represented as a string and an integer k, remove exactly k digits from the string so that the resulting number is the smallest possible, while maintaining the relative order of the remaining digits.
+
+Note : The resulting number must not contain any leading zeros.
+If the resulting number is an empty string after the removal, return "0".
+
+Examples:
+
+Input: s = "4325043", k = 3
+Output: 2043
+Explanation: Remove the three digits 4, 3, and 5 to form the new number "2043" which is smallest among all possible removal.
+
+Code:
+class Solution {
+    public String removeKdig(String s, int k) {
+        // code here
+        Stack<Character> st = new Stack<>();
+        int n=s.length();
+        if(k==n)
+            return "0";
+        for(int x=0; x<n; x++)
+        {
+            // int y=x;
+            char ch= s.charAt(x);
+            while(!st.isEmpty() && k>0 && ch<st.peek() )
+            {
+                st.pop();
+                k--;
+            }
+            
+            st.push(ch);
+            
+        }
+        
+        while(k>0)
+        {
+            k--;
+            st.pop();
+        }
+        
+        StringBuilder sb= new StringBuilder();
+        Collections.reverse(st);
+        while(!st.isEmpty() && st.peek()=='0')
+            st.pop();
+        
+        if(!st.isEmpty())
+        {
+            while(!st.isEmpty())
+            {
+                char ch=st.pop();
+                sb= sb.append(ch);
+            }
+            return sb.toString();
+        }
+        
+        return "0";
+    }
+}
