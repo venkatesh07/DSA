@@ -1,0 +1,75 @@
+You are given two integers n and k. Your task is to implement a class kQueues that uses a single array of size n to simulate k independent queues.
+
+The class should support the following operations:
+
+enqueue(x, i) → Adds the element x into the i-th queue.
+dequeue(i) → Removes the front element from the i-th queue and returns it. Returns -1 if the queue is empty.
+isEmpty(i) → Returns true if i-th queue is empty, else return false.
+isFull() → Returns true if the array is completely full and no more elements can be inserted, otherwise false.
+
+There will be a sequence of q queries represented as:
+
+1 x i : Call enqueue(x, i)
+2 i : Call dequeue(i)
+3 i : Call isEmpty(i)
+4 : Call isFull()
+
+The driver code will process the queries, call the corresponding functions, and print the results of dequeue, isEmpty, and isFull operations.
+You only need to implement the above four functions.
+
+Examples:
+
+Input: n = 4, k = 2, q = 8,
+queries = [[1, 5, 0], [1, 3, 0], [1, 1, 1], [2, 0], [1, 4, 1], [1, 1, 0], [3, 1], [4]] 
+Output: [5, false, true] 
+Explanation: Queries on the queue are as follows: 
+enqueue(5, 0) → queue0 = [5]
+enqueue(3, 0) → queue0 = [5, 3]
+enqueue(1, 1) → queue1 = [1]
+dequeue(0) → returns 5, queue0 = [3]
+enqueue(4, 1) → queue1 = [1, 4]
+enqueue(1, 0) → queue0 = [3, 1]
+isEmpty(1) → false
+isFull() → true
+
+code:
+class kQueues {
+    ArrayList<Integer>[] Q;
+    int n;
+    int currSize;
+    kQueues(int n, int k) {
+        
+        // member initialization
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer>[] temp = new ArrayList[k];
+        Q = temp;
+        
+        this.n = n; // total max size
+        currSize = 0; // currently filled with
+        for(int i=0; i<k; i++){
+            Q[i] = new ArrayList<>();
+        }
+    }
+
+    void enqueue(int x, int i) {
+        if(currSize==n) return; // already full
+        
+        Q[i].add(x);
+        currSize++; // update size
+    }
+
+    int dequeue(int i) {
+        if(Q[i].isEmpty()) return -1; // q is empty
+        
+        currSize--;
+        return Q[i].remove(0);
+    }
+
+    boolean isEmpty(int i) {
+        return Q[i].size()==0;
+    }
+
+    boolean isFull() {
+        return n==currSize; // curr size == max capacity
+    }
+}
