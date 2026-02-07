@@ -1,0 +1,30 @@
+Given an integer array arr[]. Find the maximum value of the sum of i*arr[i] for all 0 ≤ i ≤ arr.size()-1. The only operation allowed is to rotate(clockwise or counterclockwise) the array any number of times.
+
+Examples :
+
+Input: arr[] = [3, 1, 2, 8]
+Output: 29
+Explanation: Out of all the possible configurations by rotating the elements: arr[] = [3, 1, 2, 8] here (3*0) + (1*1) + (2*2) + (8*3) = 29 is maximum.
+
+code:
+class Solution {
+    int maxSum(int[] a) {
+        // code here
+        int n = a.length;
+         long sum = 0;
+        long prev = 0;
+        for(int i=0; i<n; i++){
+            prev += ((long)a[i]*(long)i);
+            sum += a[i];
+        }
+        long res = prev;
+        for(int i=1; i<n; i++){
+            long curr = prev-(sum-a[i-1]) + (long)a[i-1]*(n-1);
+            if(curr > res){
+                res = curr;
+            }
+            prev = curr;
+        }
+        return (int)res;
+    }
+}
