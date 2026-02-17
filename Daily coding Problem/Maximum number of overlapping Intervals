@@ -1,0 +1,68 @@
+You are given an array of intervals arr[][], where each interval is represented by two integers [start, end] (inclusive). Return the maximum number of intervals that overlap at any point in time.
+
+Examples :
+
+Input: arr[][] = [[1, 2], [2, 4], [3, 6]]
+Output: 2
+Explanation: The maximum overlapping intervals are 2(between (1, 2) and (2, 4) or between (2, 4) and (3, 6))
+ 
+
+
+code:
+class Solution {
+
+    public static int overlapInt(int[][] arr) {
+
+        // code here
+
+        List<int[]> events = new ArrayList<>();
+
+ 
+
+        for (int[] log : arr) {
+
+            events.add(new int[]{log[0], +1}); // birth
+
+            events.add(new int[]{log[1], -1}); // death
+
+        }
+
+//if same number then +1 comes before -1
+
+        
+
+        Collections.sort(events, (a, b) -> {
+
+            if (a[0] == b[0])
+
+                return b[1] - a[1]; // +1 first
+
+            return a[0] - b[0];
+
+        });
+
+ 
+
+        int curr = 0;
+
+        int maxPop = 0;
+
+        
+
+ 
+
+        for (int[] e : events) {
+
+            curr += e[1];
+
+            maxPop=Math .max(curr,maxPop);
+
+        }
+
+ 
+
+        return maxPop;
+
+    }
+
+}
