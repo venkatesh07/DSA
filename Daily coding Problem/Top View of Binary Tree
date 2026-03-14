@@ -1,0 +1,69 @@
+You are given the root of a binary tree, and your task is to return its top view. The top view of a binary tree is the set of nodes visible when the tree is viewed from the top.
+
+Note:
+
+Return the nodes from the leftmost node to the rightmost node.
+If multiple nodes overlap at the same horizontal position, only the topmost (closest to the root) node is included in the view. 
+Examples:
+
+Input: root = [1, 2, 3]
+Output: [2, 1, 3]
+Explanation: The Green colored nodes represents the top view in the below Binary tree.
+ 
+Input: root = [10, 20, 30, 40, 60, 90, 100]
+Output: [40, 20, 10, 30, 100]
+Explanation: The Green colored nodes represents the top view in the below Binary tree.
+
+
+Constraints:
+1 ≤ number of nodes ≤ 105
+1 ≤ node->data ≤ 105
+
+code:
+class Solution {
+
+    static class pair{
+        Node node;
+        int level;
+        
+        pair(Node node, int level){
+            this.node = node;
+            this.level = level;
+        }
+    }
+    
+    
+    static ArrayList<Integer> topView(Node root) {
+        
+        ArrayList<Integer> li = new ArrayList<>();
+        
+        if(root == null)  return li;
+        
+        Map<Integer, Integer> map = new TreeMap<>();
+        
+        Queue<pair> q = new LinkedList<>();
+        
+        q.add(new pair(root, 0));
+        
+        while(!q.isEmpty()){
+            
+            pair current = q.poll();
+            Node temp = current.node;
+            int value = current.level;
+            
+            if(!map.containsKey(value)) map.put(value, temp.data);
+            
+            if(temp.left != null) {
+                q.add(new pair(temp.left, value-1));
+            }
+            if(temp.right != null) {
+                q.add(new pair(temp.right, value+1));
+            }
+            
+            
+        }
+        return new ArrayList<>(map.values());
+        
+        
+    }
+}
